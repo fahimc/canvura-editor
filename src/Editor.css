@@ -8,6 +8,7 @@
   width: 100%;
   height: 100%;
   display: flex;
+  overflow: hidden;
 }
 .toolbar {
   background-color: var(--grey-color);
@@ -26,7 +27,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  row-gap: 30px;
+  width: 100%;
 }
 .editor-toolbar {
   height: 48px;
@@ -34,7 +35,21 @@
   background-color: var(--light-color);
   width: 100%;
   color: var(--grey-font-color);
-  margin-bottom: 40px;
   min-height: 48px;
-  border-bottom: 4px solid rgba(57, 76, 96, 0.15);
+  border-bottom: 2px solid rgba(57, 76, 96, 0.15);
+  box-sizing: border-box;
+}
+.page-holder {
+  overflow: auto;
+  width: 100%;
+  height: 100%;
+}
+.editor-footer {
+  background-color: white;
+  border-top: 1px solid rgba(57, 76, 96, 0.15);
+  z-index: 0;
+  width: 100%;
+  height: 40px;
+  display: flex;
+  flex-direction: row;
 }

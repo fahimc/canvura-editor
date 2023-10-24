@@ -2,9 +2,14 @@ import React, { useEffect, useRef } from "react";
 import { fabric } from "fabric";
 import "./Page.css";
 
-export const Page = () => {
+interface PageProps {
+  scale: number;
+}
+
+export const Page = (props: PageProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   let fabricCanvas: fabric.Canvas | undefined;
+  const { scale } = props;
   useEffect(() => {
     if (canvasRef.current && !fabricCanvas) {
       console.log("here");
@@ -23,9 +28,12 @@ export const Page = () => {
 
       fabricCanvas.add(rect);
     }
+    // fabricCanvas?.setZoom(scale);
+    // fabricCanvas?.setWidth(1080 * scale);
+    // fabricCanvas?.setHeight(1080 * scale);
   }, []);
   return (
-    <div className="page-container">
+    <div className="page-container" style={{ transform: `scale(${scale})` }}>
       <canvas ref={canvasRef}></canvas>
     </div>
   );
