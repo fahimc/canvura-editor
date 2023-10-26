@@ -4,12 +4,14 @@ import "./Page.css";
 
 interface PageProps {
   scale: number;
+  getApi(canvas: fabric.Canvas): void;
+  setCurrentPage(): void;
 }
 
 export const Page = (props: PageProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   let fabricCanvas: fabric.Canvas | undefined;
-  const { scale } = props;
+  const { scale, getApi } = props;
   useEffect(() => {
     if (canvasRef.current && !fabricCanvas) {
       console.log("here");
@@ -27,13 +29,15 @@ export const Page = (props: PageProps) => {
       });
 
       fabricCanvas.add(rect);
+      getApi(fabricCanvas);
     }
-    // fabricCanvas?.setZoom(scale);
-    // fabricCanvas?.setWidth(1080 * scale);
-    // fabricCanvas?.setHeight(1080 * scale);
   }, []);
   return (
-    <div className="page-container" style={{ transform: `scale(${scale})` }}>
+    <div
+      className="page-container"
+      style={{ transform: `scale(${scale})` }}
+      onClick={() => props.setCurrentPage()}
+    >
       <canvas ref={canvasRef}></canvas>
     </div>
   );
