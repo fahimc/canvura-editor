@@ -4,10 +4,16 @@ import { Page } from "./component/Page";
 import { Sidebar } from "./component/Sidebar";
 import { fabric } from "fabric";
 
+const colorPalette = {
+  lightGrey: "#d9d9d9",
+};
+const apis: fabric.Canvas[] = [];
 function Editor() {
   const [scale, setScale] = useState(1);
+  const [isPosition, setIsPosition] = useState(false);
   const [pages, setPages] = useState([{}, {}]);
-  const apis: fabric.Canvas[] = [];
+  const [layers, setLayers] = useState<any[]>([]);
+
   let currentCanvasIndex = 0;
 
   const getApi = (index: number, fabricCanvas: fabric.Canvas) => {
@@ -19,7 +25,6 @@ function Editor() {
   };
 
   function handleImage(e: any) {
-    console.log(e);
     var reader = new FileReader();
     reader.onload = function (event) {
       const img = new Image();
@@ -42,6 +47,7 @@ function Editor() {
   }
 
   const createElement = (type: string) => {
+    setIsPosition(false);
     if (apis[currentCanvasIndex]) {
       switch (type) {
         case "rect":
@@ -50,7 +56,7 @@ function Editor() {
             left: 100,
             width: 100,
             height: 100,
-            fill: "red",
+            fill: colorPalette.lightGrey,
           });
 
           apis[currentCanvasIndex].add(rect);
@@ -59,7 +65,7 @@ function Editor() {
         case "circle":
           const circle = new fabric.Circle({
             radius: 50,
-            fill: "green",
+            fill: colorPalette.lightGrey,
             left: 100,
             top: 100,
           });
@@ -70,7 +76,7 @@ function Editor() {
           const triangle = new fabric.Triangle({
             width: 20,
             height: 30,
-            fill: "blue",
+            fill: colorPalette.lightGrey,
             left: 50,
             top: 50,
           });
@@ -85,7 +91,7 @@ function Editor() {
             height: 100,
             rx: 10,
             ry: 10,
-            fill: "red",
+            fill: colorPalette.lightGrey,
           });
 
           apis[currentCanvasIndex].add(rounded);
@@ -96,12 +102,14 @@ function Editor() {
             left: 100,
             width: 200,
             height: 5,
-            fill: "red",
+            fill: colorPalette.lightGrey,
           });
           apis[currentCanvasIndex].add(line);
           break;
         case "textbox":
-          const text = new fabric.Textbox("Sample Text", { width: 100 });
+          const text = new fabric.Textbox("Sample Text", {
+            width: 100,
+          });
 
           apis[currentCanvasIndex].add(text);
           break;
@@ -113,10 +121,25 @@ function Editor() {
 
   return (
     <div className="editor-container">
-      <Sidebar createElement={createElement} handleImage={handleImage} />
+      <Sidebar
+        createElement={createElement}
+        handleImage={handleImage}
+        showPosition={isPosition}
+        layers={layers}
+      />
       <div className="main-container">
         <div className="editor-toolbar">
-          <button>position</button>
+          <button
+            onClick={() => {
+              setIsPosition(!isPosition);
+              if (apis[currentCanvasIndex]) {
+                console.log(apis[currentCanvasIndex]._objects);
+                setLayers(apis[currentCanvasIndex]._objects);
+              }
+            }}
+          >
+            Position
+          </button>
         </div>
         <div className="page-holder">
           {pages.map((item, index) => {

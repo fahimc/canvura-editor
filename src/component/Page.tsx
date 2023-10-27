@@ -14,21 +14,12 @@ export const Page = (props: PageProps) => {
   const { scale, getApi } = props;
   useEffect(() => {
     if (canvasRef.current && !fabricCanvas) {
-      console.log("here");
       fabricCanvas = new fabric.Canvas(canvasRef.current, {
         backgroundColor: "white",
       });
       fabricCanvas.setWidth(1080);
       fabricCanvas.setHeight(1080);
-      var rect = new fabric.Rect({
-        top: 100,
-        left: 100,
-        width: 60,
-        height: 70,
-        fill: "red",
-      });
 
-      fabricCanvas.add(rect);
       getApi(fabricCanvas);
     }
   }, []);

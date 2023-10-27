@@ -1,15 +1,18 @@
 :root {
+  --light-grey-color: #d9d9d9;
   --grey-color: #18191b;
   --grey2-color: #252627;
   --light-font-color: white;
   --grey-font-color: rgb(153, 146, 150);
   --light-color: white;
+  --dark-color: #0d1216;
 }
 .editor-container {
   width: 100%;
   height: 100%;
   display: flex;
   overflow: hidden;
+  position: relative;
 }
 
 .main-container {
@@ -21,13 +24,28 @@
 }
 .editor-toolbar {
   height: 48px;
-  display: block;
+  display: flex;
   background-color: var(--light-color);
   width: 100%;
   color: var(--grey-font-color);
   min-height: 48px;
   border-bottom: 2px solid rgba(57, 76, 96, 0.15);
   box-sizing: border-box;
+  justify-content: flex-start;
+  align-items: center;
+  font-weight: bold;
+}
+.editor-toolbar button {
+  color: var(--dark-color);
+  background-color: transparent;
+  border: 0;
+  font-size: 14px;
+  margin-left: 10px;
+  cursor: pointer;
+  padding: 5px 10px;
+}
+.editor-toolbar button:hover {
+  background-color: #f1f3f5;
 }
 .page-holder {
   overflow: auto;

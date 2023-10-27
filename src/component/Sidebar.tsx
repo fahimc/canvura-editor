@@ -1,17 +1,25 @@
 import React, { createElement, useEffect, useRef, useState } from "react";
 import "./Sidebar.css";
-import { ViewQuilt, Interests, Title, Upload } from "@mui/icons-material";
+import {
+  ViewQuilt,
+  Interests,
+  Title,
+  Upload,
+  NavigateBefore,
+} from "@mui/icons-material";
 
 export type SectionType =
   | "design"
   | "elements"
   | "upload"
-  | "upload"
+  | "position"
   | "text"
   | "";
 export const Sidebar = (props: {
   createElement: (item: any) => void;
   handleImage: (e: any) => void;
+  showPosition: boolean;
+  layers?: any[];
 }) => {
   const [showContent, setShowContent] = useState(false);
   const [sectionType, setSection] = useState<SectionType>("");
@@ -23,6 +31,15 @@ export const Sidebar = (props: {
     { type: "line", src: "/shapes/line.png" },
     { type: "rounded-square", src: "/shapes/rounded-square.png" },
   ];
+
+  useEffect(() => {
+    if (props.showPosition) {
+      if (!showContent) setShowContent(true);
+      setSection("position");
+    } else {
+      if (sectionType === "position" && showContent) setShowContent(false);
+    }
+  }, [props.showPosition]);
 
   return (
     <>
@@ -92,11 +109,20 @@ export const Sidebar = (props: {
             type="file"
             id="inp"
             onInput={(e: any) => {
-              console.log("file");
               props.handleImage(e);
             }}
           />
         )}
+        {sectionType === "position" && (
+          <div className="position-container">
+            {props.layers?.map((item) => (
+              <div>layer</div>
+            ))}
+          </div>
+        )}
+        <div className="handle" onClick={() => setShowContent(false)}>
+          <NavigateBefore sx={{ color: "white" }} />
+        </div>
       </div>
     </>
   );
