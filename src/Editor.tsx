@@ -1,23 +1,25 @@
 import React, { useState } from "react";
 import "./Editor.css";
-import { Page } from "./component/Page";
+import { Page, PageApi } from "./component/Page";
 import { Sidebar } from "./component/Sidebar";
 import { fabric } from "fabric";
 
 const colorPalette = {
   lightGrey: "#d9d9d9",
 };
-const apis: fabric.Canvas[] = [];
+const apis: PageApi[] = [];
 function Editor() {
   const [scale, setScale] = useState(1);
   const [isPosition, setIsPosition] = useState(false);
+  const [section, setSection] = useState("");
+  const [isColorPalette, setIsColorPalette] = useState(false);
   const [pages, setPages] = useState([{}, {}]);
   const [layers, setLayers] = useState<any[]>([]);
 
   let currentCanvasIndex = 0;
 
-  const getApi = (index: number, fabricCanvas: fabric.Canvas) => {
-    apis[index] = fabricCanvas;
+  const getApi = (index: number, api: PageApi) => {
+    apis[index] = api;
   };
 
   const setCurrentPage = (index: number) => {
@@ -38,7 +40,7 @@ function Editor() {
         // canvas.width = img.width;
         // canvas.height = img.height;
         // ctx.drawImage(img, 0, 0);
-        apis[currentCanvasIndex].add(imgInstance);
+        apis[currentCanvasIndex].add("image", imgInstance);
       };
       console.log(event);
       img.src = (event.target?.result as string) || "";
@@ -59,7 +61,7 @@ function Editor() {
             fill: colorPalette.lightGrey,
           });
 
-          apis[currentCanvasIndex].add(rect);
+          apis[currentCanvasIndex].add(type, rect);
 
           break;
         case "circle":
@@ -70,7 +72,7 @@ function Editor() {
             top: 100,
           });
 
-          apis[currentCanvasIndex].add(circle);
+          apis[currentCanvasIndex].add(type, circle);
           break;
         case "triangle":
           const triangle = new fabric.Triangle({
@@ -81,7 +83,7 @@ function Editor() {
             top: 50,
           });
 
-          apis[currentCanvasIndex].add(triangle);
+          apis[currentCanvasIndex].add(type, triangle);
           break;
         case "rounded-square":
           const rounded = new fabric.Rect({
@@ -94,7 +96,7 @@ function Editor() {
             fill: colorPalette.lightGrey,
           });
 
-          apis[currentCanvasIndex].add(rounded);
+          apis[currentCanvasIndex].add(type, rounded);
           break;
         case "line":
           const line = new fabric.Rect({
@@ -104,14 +106,14 @@ function Editor() {
             height: 5,
             fill: colorPalette.lightGrey,
           });
-          apis[currentCanvasIndex].add(line);
+          apis[currentCanvasIndex].add(type, line);
           break;
         case "textbox":
           const text = new fabric.Textbox("Sample Text", {
             width: 100,
           });
 
-          apis[currentCanvasIndex].add(text);
+          apis[currentCanvasIndex].add(type, text);
           break;
         case "image":
           break;
@@ -125,6 +127,8 @@ function Editor() {
         createElement={createElement}
         handleImage={handleImage}
         showPosition={isPosition}
+        section={section}
+        updateSection={setSection}
         layers={layers}
       />
       <div className="main-container">
@@ -133,8 +137,7 @@ function Editor() {
             onClick={() => {
               setIsPosition(!isPosition);
               if (apis[currentCanvasIndex]) {
-                console.log(apis[currentCanvasIndex]._objects);
-                setLayers(apis[currentCanvasIndex]._objects);
+                setLayers(apis[currentCanvasIndex].getObjects());
               }
             }}
           >
@@ -149,6 +152,7 @@ function Editor() {
                 scale={scale}
                 getApi={(canvas) => getApi(index, canvas)}
                 setCurrentPage={() => setCurrentPage(index)}
+                updateSection={setSection}
               ></Page>
             );
           })}

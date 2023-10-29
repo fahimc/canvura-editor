@@ -1,4 +1,6 @@
 import React, { createElement, useEffect, useRef, useState } from "react";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+
 import "./Sidebar.css";
 import {
   ViewQuilt,
@@ -7,18 +9,22 @@ import {
   Upload,
   NavigateBefore,
 } from "@mui/icons-material";
+import { solidColourPalette } from "../util/colors";
 
 export type SectionType =
   | "design"
   | "elements"
   | "upload"
   | "position"
+  | "color"
   | "text"
   | "";
 export const Sidebar = (props: {
   createElement: (item: any) => void;
   handleImage: (e: any) => void;
   showPosition: boolean;
+  section: string;
+  updateSection: (section: string) => void;
   layers?: any[];
 }) => {
   const [showContent, setShowContent] = useState(false);
@@ -39,7 +45,13 @@ export const Sidebar = (props: {
     } else {
       if (sectionType === "position" && showContent) setShowContent(false);
     }
-  }, [props.showPosition]);
+    props.updateSection("");
+    if (props.section) setSection(props.section as any);
+  }, [props.showPosition, props.section]);
+  const [droppableId, setDroppableId] = useState("list1");
+  useEffect(() => {
+    setDroppableId(() => "list");
+  }, []);
 
   return (
     <>
@@ -115,9 +127,26 @@ export const Sidebar = (props: {
         )}
         {sectionType === "position" && (
           <div className="position-container">
-            {props.layers?.map((item) => (
-              <div>layer</div>
-            ))}
+            {props.layers?.map((item) => {
+              {
+                console.log(item);
+              }
+              return <div className="position-item">{item.type}</div>;
+            })}
+          </div>
+        )}
+        {sectionType === "color" && (
+          <div className="color-container">
+            {solidColourPalette?.map((item) => {
+              return (
+                <div
+                  className="color-item"
+                  style={{ backgroundColor: item.color }}
+                >
+                  {item.color}
+                </div>
+              );
+            })}
           </div>
         )}
         <div className="handle" onClick={() => setShowContent(false)}>
