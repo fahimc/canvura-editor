@@ -14,7 +14,7 @@ interface PageProps {
   scale: number;
   getApi(canvas: PageApi): void;
   setCurrentPage(): void;
-  updateSection: (section: string) => void;
+  setShowObjectToolbar: (show: boolean) => void;
 }
 
 export const Page = (props: PageProps) => {
@@ -62,7 +62,7 @@ export const Page = (props: PageProps) => {
       // });
       const handleSelection = () => {
         console.log("selected");
-        props.updateSection("color");
+        props.setShowObjectToolbar(true);
       };
       fabricCanvas.on("selection:updated", handleSelection);
 

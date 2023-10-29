@@ -3,6 +3,7 @@ import "./Editor.css";
 import { Page, PageApi } from "./component/Page";
 import { Sidebar } from "./component/Sidebar";
 import { fabric } from "fabric";
+import { ObjectToolbar } from "./component/ObjectToolbar";
 
 const colorPalette = {
   lightGrey: "#d9d9d9",
@@ -11,6 +12,7 @@ const apis: PageApi[] = [];
 function Editor() {
   const [scale, setScale] = useState(1);
   const [isPosition, setIsPosition] = useState(false);
+  const [showObjectToolbar, setShowObjectToolbar] = useState(false);
   const [section, setSection] = useState("");
   const [isColorPalette, setIsColorPalette] = useState(false);
   const [pages, setPages] = useState([{}, {}]);
@@ -35,11 +37,7 @@ function Editor() {
           left: 100,
           top: 100,
         });
-        console.log(imgInstance);
 
-        // canvas.width = img.width;
-        // canvas.height = img.height;
-        // ctx.drawImage(img, 0, 0);
         apis[currentCanvasIndex].add("image", imgInstance);
       };
       console.log(event);
@@ -133,6 +131,7 @@ function Editor() {
       />
       <div className="main-container">
         <div className="editor-toolbar">
+          {showObjectToolbar && <ObjectToolbar setSection={setSection} />}
           <button
             onClick={() => {
               setIsPosition(!isPosition);
@@ -152,7 +151,7 @@ function Editor() {
                 scale={scale}
                 getApi={(canvas) => getApi(index, canvas)}
                 setCurrentPage={() => setCurrentPage(index)}
-                updateSection={setSection}
+                setShowObjectToolbar={setShowObjectToolbar}
               ></Page>
             );
           })}

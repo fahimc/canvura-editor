@@ -1,5 +1,6 @@
 import React, { createElement, useEffect, useRef, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import PaletteIcon from "@mui/icons-material/Palette";
 
 import "./Sidebar.css";
 import {
@@ -48,10 +49,6 @@ export const Sidebar = (props: {
     props.updateSection("");
     if (props.section) setSection(props.section as any);
   }, [props.showPosition, props.section]);
-  const [droppableId, setDroppableId] = useState("list1");
-  useEffect(() => {
-    setDroppableId(() => "list");
-  }, []);
 
   return (
     <>
@@ -136,17 +133,27 @@ export const Sidebar = (props: {
           </div>
         )}
         {sectionType === "color" && (
-          <div className="color-container">
-            {solidColourPalette?.map((item) => {
-              return (
-                <div
-                  className="color-item"
-                  style={{ backgroundColor: item.color }}
-                >
-                  {item.color}
-                </div>
-              );
-            })}
+          <div className="color-section">
+            <div className="color-title">
+              <PaletteIcon
+                sx={{
+                  marginRight: "10px",
+                  width: "24px",
+                  color: "var( --dark-font-color)",
+                }}
+              />{" "}
+              <span>Default colours</span>
+            </div>
+            <div className="color-container">
+              {solidColourPalette?.map((item) => {
+                return (
+                  <div
+                    className="color-item"
+                    style={{ backgroundColor: item.color }}
+                  ></div>
+                );
+              })}
+            </div>
           </div>
         )}
         <div className="handle" onClick={() => setShowContent(false)}>

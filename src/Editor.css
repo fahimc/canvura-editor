@@ -6,6 +6,7 @@
   --grey-font-color: rgb(153, 146, 150);
   --light-color: white;
   --dark-color: #0d1216;
+  --dark-font-color: rgb(13, 18, 22);
 }
 .editor-container {
   width: 100%;

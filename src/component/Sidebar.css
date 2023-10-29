@@ -86,3 +86,40 @@ button.textbox {
   border-radius: 10px;
   user-select: "none";
 }
+.color-container {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  width: 100%;
+  column-gap: 8px;
+  row-gap: 8px;
+  align-items: center;
+  justify-content: center;
+}
+.color-section {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  background-color: white;
+  flex-direction: column;
+  color: var(--dark-font-color);
+}
+.color-item {
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  box-sizing: border-box;
+  border: solid 1px var(--light-grey-color);
+  transition: border 0.2s ease-in-out;
+  cursor: pointer;
+}
+.color-item:hover {
+  box-shadow: 0 0 0 1px rgba(28, 39, 48, 0.5),
+    inset 0 0 0 2px rgba(28, 39, 48, 0.5), inset 0 0 0 4px white;
+}
+.color-title {
+  padding: 10px;
+  display: flex;
+  font-size: 14px;
+}
