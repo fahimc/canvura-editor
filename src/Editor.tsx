@@ -20,6 +20,11 @@ function Editor() {
 
   let currentCanvasIndex = 0;
 
+  const setBgColor = (color: string) => {
+    apis[currentCanvasIndex].fabricCanvas.getActiveObject()?.set("fill", color);
+    apis[currentCanvasIndex].fabricCanvas.renderAll();
+  };
+
   const getApi = (index: number, api: PageApi) => {
     apis[index] = api;
   };
@@ -127,6 +132,7 @@ function Editor() {
         showPosition={isPosition}
         section={section}
         updateSection={setSection}
+        setBgColor={setBgColor}
         layers={layers}
       />
       <div className="main-container">

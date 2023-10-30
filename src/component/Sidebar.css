@@ -96,6 +96,7 @@ button.textbox {
   row-gap: 8px;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
 }
 .color-section {
   height: 100%;
@@ -104,6 +105,10 @@ button.textbox {
   background-color: white;
   flex-direction: column;
   color: var(--dark-font-color);
+  overflow: auto;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  box-sizing: border-box;
 }
 .color-item {
   width: 40px;
@@ -122,4 +127,55 @@ button.textbox {
   padding: 10px;
   display: flex;
   font-size: 14px;
+}
+.color-picker {
+  background-image: url(/public/icon/color-picker-icon.webp);
+  background-size: contain;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.color-picker .plus-container {
+  align-items: center;
+  background-color: white;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(64, 87, 109, 0.07),
+    0 2px 8px rgba(57, 76, 96, 0.15);
+  display: flex;
+  justify-content: center;
+  height: 24px;
+  width: 24px;
+}
+.colour-picker-overlay {
+  display: none;
+  background-color: white;
+  border-radius: 4px;
+  margin: 8px 0;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(64, 87, 109, 0.07),
+    0 2px 12px rgba(53, 71, 90, 0.2);
+  width: 90%;
+  padding: 10px;
+  box-sizing: border-box;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.colour-picker-overlay.show {
+  display: flex;
+}
+.react-colorful {
+  width: 90% !important;
+}
+input {
+  background-color: white;
+  border: 1px solid;
+  border-color: rgba(43, 59, 74, 0.3);
+  border-radius: 4px;
+  padding: 0 12px;
+  height: 40px;
+  width: 80%;
+  margin-top: 10px;
+  color: #0d1216;
+  text-transform: uppercase;
 }
