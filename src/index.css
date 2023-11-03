@@ -9,3 +9,37 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  border: 0;
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
+  height: 10px;
+}
+/***** Chrome, Safari, Opera, and Edge Chromium *****/
+input[type="range"]::-webkit-slider-runnable-track {
+  background: var(--light-grey-color);
+  height: 2px;
+}
+
+/******** Firefox ********/
+input[type="range"]::-moz-range-track {
+  background: var(--light-grey-color);
+  height: 2px;
+}
+/***** Thumb Styles *****/
+/***** Chrome, Safari, Opera, and Edge Chromium *****/
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  transform: translateY(-50%);
+  background-color: white;
+  border: 1px solid var(--grey-color);
+  border-radius: 50%;
+  height: 15px;
+  width: 15px;
+}

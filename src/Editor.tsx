@@ -17,11 +17,33 @@ function Editor() {
   const [isColorPalette, setIsColorPalette] = useState(false);
   const [pages, setPages] = useState([{}, {}]);
   const [layers, setLayers] = useState<any[]>([]);
-
+  const [currentColor, setCurrentColor] = useState<string>("");
+  const [currentBorderColor, setCurrentBorderColor] = useState<string>("black");
   let currentCanvasIndex = 0;
 
   const setBgColor = (color: string) => {
     apis[currentCanvasIndex].fabricCanvas.getActiveObject()?.set("fill", color);
+    apis[currentCanvasIndex].fabricCanvas.renderAll();
+    setCurrentColor(color);
+  };
+  const setBorderColor = (color: string) => {
+    apis[currentCanvasIndex].fabricCanvas
+      .getActiveObject()
+      ?.set("stroke", color);
+    apis[currentCanvasIndex].fabricCanvas.renderAll();
+    setCurrentBorderColor(color);
+  };
+
+  const setBorder = (strokeWidth: number, dash: number[]) => {
+    apis[currentCanvasIndex].fabricCanvas
+      .getActiveObject()
+      ?.set("strokeWidth", strokeWidth);
+    apis[currentCanvasIndex].fabricCanvas
+      .getActiveObject()
+      ?.set("stroke", currentBorderColor);
+    apis[currentCanvasIndex].fabricCanvas
+      .getActiveObject()
+      ?.set("strokeDashArray", dash);
     apis[currentCanvasIndex].fabricCanvas.renderAll();
   };
 
@@ -137,10 +159,17 @@ function Editor() {
       />
       <div className="main-container">
         <div className="editor-toolbar">
-          {showObjectToolbar && <ObjectToolbar setSection={setSection} />}
+          {showObjectToolbar && (
+            <ObjectToolbar
+              setSection={setSection}
+              setBorder={setBorder}
+              currentColor={currentColor}
+              currentBorderColor={currentBorderColor}
+            />
+          )}
           <button
             onClick={() => {
-              setIsPosition(!isPosition);
+              setSection("position");
               if (apis[currentCanvasIndex]) {
                 setLayers(apis[currentCanvasIndex].getObjects());
               }

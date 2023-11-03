@@ -28,6 +28,7 @@ export const Sidebar = (props: {
   updateSection: (section: string) => void;
   setBgColor: (color: string) => void;
   layers?: any[];
+  showSection?: string;
 }) => {
   const [showContent, setShowContent] = useState(false);
   const [userColors, setUserColors] = useState<string[]>([]);
@@ -58,13 +59,8 @@ export const Sidebar = (props: {
   }
 
   useEffect(() => {
-    if (props.showPosition) {
-      if (!showContent) setShowContent(true);
-      setSection("position");
-    } else {
-      if (sectionType === "position" && showContent) setShowContent(false);
-    }
-    props.updateSection("");
+    if (!showContent) setShowContent(true);
+
     if (props.section) setSection(props.section as any);
   }, [props.showPosition, props.section]);
 
