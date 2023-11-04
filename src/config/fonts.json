@@ -1,0 +1,9 @@
+[
+  { "name": "Open Sans Light", "path": "/font/open-sans/OpenSans-Light.ttf" },
+  {
+    "name": "Open Sans Regular",
+    "path": "/font/open-sans/OpenSans-Regular.ttf"
+  },
+  { "name": "Open Sans Medium", "path": "/font/open-sans/OpenSans-Medium.ttf" },
+  { "name": "Open Sans Bold", "path": "/font/open-sans/OpenSans-Bold.ttf" }
+]

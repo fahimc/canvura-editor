@@ -12,6 +12,7 @@
   transition: all;
   display: none;
   flex-wrap: wrap;
+  height: 100%;
   gap: 0;
   flex-direction: row;
   align-items: flex-start;
@@ -19,9 +20,11 @@
   position: relative;
   justify-content: center;
   border-right: 1px solid rgba(57, 76, 96, 0.15);
+  overflow: hidden;
+  box-sizing: border-box;
 }
 .toolbar-content.show {
-  width: 342px;
+  min-width: 200px;
   display: flex;
 }
 .toolbar button,
@@ -108,6 +111,7 @@ button.textbox {
   display: flex;
   flex-direction: column;
   padding: 10px;
+  overflow: auto;
 }
 .color-section {
   height: 100%;
@@ -195,7 +199,6 @@ input {
   align-items: center;
   display: flex;
   height: auto;
-  min-height: 40px;
   cursor: pointer;
 }
 .font-item:hover {

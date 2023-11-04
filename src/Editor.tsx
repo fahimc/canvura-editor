@@ -34,21 +34,25 @@ function Editor() {
     setCurrentBorderColor(color);
   };
 
-  const setFont = (font: { name: string; path: string }) => {
-    console.log(font);
-    const fontFile = new FontFace(font.name, font.path);
+  const setFont = (font: {
+    name: string;
+    path: string;
+    weight?: string | number;
+    family?: string;
+  }) => {
+    const fontFile = new FontFace(font.name, `url(${font.path})`);
     document.fonts.add(fontFile);
 
-    fontFile.load().then(
-      () => {
-        apis[currentCanvasIndex].fabricCanvas
-          .getActiveObject()
-          ?.set("fontFamily" as any, font.name);
-      },
-      (err) => {
-        console.error(err);
-      }
-    );
+    fontFile.load().then(() => {
+      apis[currentCanvasIndex]?.fabricCanvas
+        ?.getActiveObject()
+        ?.set("fontFamily" as any, font.family || font.name);
+      if (font.weight)
+        apis[currentCanvasIndex]?.fabricCanvas
+          ?.getActiveObject()
+          ?.set("fontWeight" as any, font.weight);
+      apis[currentCanvasIndex]?.fabricCanvas?.renderAll();
+    });
   };
 
   const setBorder = (strokeWidth: number, dash: number[]) => {

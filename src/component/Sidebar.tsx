@@ -49,6 +49,61 @@ export const Sidebar = (props: {
     { name: "Open Sans Regular", path: "/font/open-sans/OpenSans-Regular.ttf" },
     { name: "Open Sans Medium", path: "/font/open-sans/OpenSans-Medium.ttf" },
     { name: "Open Sans Bold", path: "/font/open-sans/OpenSans-Bold.ttf" },
+    {
+      name: "Open Sans Light",
+      path: "https://fonts.gstatic.com/s/opensans/v20/mem5YaGs126MiZpBA-UN7rgOX-hpOqc.woff2",
+    },
+    {
+      name: "Roboto Regular",
+      path: "https://fonts.gstatic.com/s/roboto/v27/KFOmCnqEu92Fr1Mu72xKKTU1Kg.woff2",
+    },
+    {
+      name: "Lato Regular",
+      path: "https://fonts.gstatic.com/s/lato/v17/S6uyw4BMUTPHjx4wXg.woff2",
+    },
+    {
+      name: "Noto Sans JP",
+      path: "https://fonts.gstatic.com/s/notosansjp/v52/-F6jfjtqLzI2JPCgQBnw7HFyzSD-AsregP8VFBEj756wwr4v0qHnANADNsISRDl2PRkiiWsg.0.woff2",
+    },
+    {
+      name: "Lato",
+      path: "https://fonts.gstatic.com/s/lato/v20/S6uyw4BMUTPHjx4wXiWtFCc.woff2",
+    },
+    {
+      name: "Lato Bold",
+      path: "https://fonts.gstatic.com/s/lato/v24/S6u9w4BMUTPHh6UVSwaPGR_p.woff2",
+      weight: 700,
+    },
+    {
+      name: "Oswald",
+      path: "https://fonts.gstatic.com/s/oswald/v36/TK3iWkUHHAIjg752GT8G.woff2",
+    },
+    {
+      name: "Lobster",
+      path: "https://fonts.gstatic.com/s/lobster/v30/neILzCirqoswsqX9zoKmMw.woff2",
+      weight: 400,
+    },
+
+    {
+      name: "Roboto Mono Regular",
+      path: "https://fonts.gstatic.com/s/robotomono/v23/L0x5DF4xlVMF-BfR8bXMIjhLq38.woff2",
+      weight: 400,
+    },
+    {
+      name: "Roboto Mono Extra Bold",
+      path: "https://fonts.gstatic.com/s/robotomono/v23/L0x5DF4xlVMF-BfR8bXMIjhLq38.woff2",
+      weight: 700,
+    },
+    {
+      name: "Agbalumo",
+      path: "https://fonts.gstatic.com/s/agbalumo/v2/55xvey5uMdT2N37KZfMCgLg.woff2",
+      weight: 400,
+    },
+    {
+      name: "Anton",
+      path: "https://fonts.gstatic.com/s/anton/v25/1Ptgg87LROyAm3Kz-C8.woff2",
+      weight: 400,
+    },
   ];
 
   useEffect(() => {
