@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import LineWeightIcon from "@mui/icons-material/LineWeight";
 import DoDisturbIcon from "@mui/icons-material/DoDisturb";
 import "./ObjectToolbar.css";
+import { useDetectClickOutside } from "react-detect-click-outside";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 export const ObjectToolbar = (props: {
   setSection: (section: string) => void;
@@ -17,6 +19,12 @@ export const ObjectToolbar = (props: {
     setBorderWidth(strokeWidth);
     props.setBorder(strokeWidth, dashArray);
   }
+  const [showModal, setShowModal] = useState(false);
+  const modalRef = useDetectClickOutside({
+    onTriggered: () => {
+      // setShowModal(false);
+    },
+  });
   return (
     <>
       <div className="toolbar-container">
@@ -26,16 +34,30 @@ export const ObjectToolbar = (props: {
             style={{ backgroundColor: props.currentColor || "#d9d9d9" }}
           ></div>
         </button>
-        <button onClick={() => props.setSection("color")}>
+        <button onClick={() => props.setSection("border-color")}>
           <div
             className="border-color-button"
             style={{ borderColor: props.currentBorderColor || "#d9d9d9" }}
           ></div>
         </button>
-        <button onClick={() => {}}>
+        <button onClick={() => setShowModal(!showModal)}>
           <LineWeightIcon />
         </button>
-        <div className="toolbar-modal">
+        <button
+          className="font-selector"
+          onClick={() => props.setSection("font-family")}
+        >
+          <div>
+            <span>Arimo</span>
+            <span>
+              <KeyboardArrowDownIcon />
+            </span>
+          </div>
+        </button>
+        <div
+          className={`toolbar-modal ${showModal ? " show" : ""}`}
+          ref={modalRef}
+        >
           {modelSection === "border" && (
             <div>
               <div className="line-style-container">

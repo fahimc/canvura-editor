@@ -1,6 +1,4 @@
 import React, { createElement, useEffect, useRef, useState } from "react";
-import PaletteIcon from "@mui/icons-material/Palette";
-import { HexColorPicker } from "react-colorful";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import "./Sidebar.css";
 import {
@@ -10,7 +8,7 @@ import {
   Upload,
   NavigateBefore,
 } from "@mui/icons-material";
-import { solidColourPalette } from "../util/colors";
+import { ColorPanel } from "./color-panel/ColorPanel";
 
 export type SectionType =
   | "design"
@@ -18,6 +16,8 @@ export type SectionType =
   | "upload"
   | "position"
   | "color"
+  | "border-color"
+  | "font-family"
   | "text"
   | "";
 export const Sidebar = (props: {
@@ -27,23 +27,14 @@ export const Sidebar = (props: {
   section: string;
   updateSection: (section: string) => void;
   setBgColor: (color: string) => void;
+  setBorderColor: (color: string) => void;
+  setFont: (font: { name: string; path: string }) => void;
   layers?: any[];
   showSection?: string;
 }) => {
   const [showContent, setShowContent] = useState(false);
-  const [userColors, setUserColors] = useState<string[]>([]);
-  const [showColourOverlay, setShowColourOverlay] = useState(false);
-  const [color, setColor] = useState("#aabbcc");
   const [sectionType, setSection] = useState<SectionType>("");
-  const colorOverlayRef = useDetectClickOutside({
-    onTriggered: () => {
-      if (!userColors.find((item) => item === color)) {
-        console.log(userColors, color);
-        setUserColors([...userColors, color]);
-        setShowColourOverlay(false);
-      }
-    },
-  });
+
   const elementImages = [
     { type: "rect", src: "/shapes/square.png" },
     { type: "circle", src: "/shapes/circle.png" },
@@ -53,14 +44,16 @@ export const Sidebar = (props: {
     { type: "rounded-square", src: "/shapes/rounded-square.png" },
   ];
 
-  function setOverlayColor(c: string) {
-    props.setBgColor(c);
-    setColor(c);
-  }
+  const fontFamilyList = [
+    { name: "Open Sans Light", path: "/font/open-sans/OpenSans-Light.ttf" },
+    { name: "Open Sans Regular", path: "/font/open-sans/OpenSans-Regular.ttf" },
+    { name: "Open Sans Medium", path: "/font/open-sans/OpenSans-Medium.ttf" },
+    { name: "Open Sans Bold", path: "/font/open-sans/OpenSans-Bold.ttf" },
+  ];
 
   useEffect(() => {
     if (!showContent) setShowContent(true);
-
+    console.log(props.section);
     if (props.section) setSection(props.section as any);
   }, [props.showPosition, props.section]);
 
@@ -144,92 +137,19 @@ export const Sidebar = (props: {
           </div>
         )}
         {sectionType === "color" && (
-          <div className="color-section">
-            <div className="color-title">
-              <PaletteIcon
-                sx={{
-                  marginRight: "10px",
-                  width: "24px",
-                  color: "var( --dark-font-color)",
-                }}
-              />{" "}
-              <span>Document colours</span>
-            </div>
-            <div className="color-container">
-              <div
-                className="color-item color-picker"
-                onClick={() => setShowColourOverlay(!showColourOverlay)}
-              >
-                <span className="plus-container">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fill="currentColor"
-                      d="M7.25 13.25a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5Z"
-                    ></path>
-                  </svg>
-                </span>
+          <ColorPanel setBgColor={props.setBgColor} />
+        )}
+        {sectionType === "border-color" && (
+          <ColorPanel setBgColor={props.setBorderColor} />
+        )}
+        {sectionType === "font-family" && (
+          <div className="font-family">
+            <h1>Font</h1>
+            {fontFamilyList.map((item) => (
+              <div onClick={() => props.setFont(item)} className="font-item">
+                {item.name}
               </div>
-              <div
-                ref={colorOverlayRef}
-                className={`colour-picker-overlay ${
-                  showColourOverlay && "show"
-                }`}
-              >
-                <HexColorPicker color={color} onChange={setOverlayColor} />
-                <input
-                  type="text"
-                  value={color}
-                  onInput={(e: any) => setOverlayColor(e.target.value)}
-                />
-              </div>
-            </div>
-            <div className="color-title">
-              <PaletteIcon
-                sx={{
-                  marginRight: "10px",
-                  width: "24px",
-                  color: "var( --dark-font-color)",
-                }}
-              />{" "}
-              <span>Brand kit</span>
-            </div>
-            <div className="color-container">
-              {userColors?.map((item) => {
-                return (
-                  <div
-                    className="color-item"
-                    style={{ backgroundColor: item }}
-                    onClick={() => props.setBgColor(item)}
-                  ></div>
-                );
-              })}
-            </div>
-            <div className="color-title">
-              <PaletteIcon
-                sx={{
-                  marginRight: "10px",
-                  width: "24px",
-                  color: "var( --dark-font-color)",
-                }}
-              />{" "}
-              <span>Default colours</span>
-            </div>
-            <div className="color-container">
-              {solidColourPalette?.map((item) => {
-                return (
-                  <div
-                    className="color-item"
-                    style={{ backgroundColor: item.color }}
-                    onClick={() => props.setBgColor(item.color)}
-                  ></div>
-                );
-              })}
-            </div>
+            ))}
           </div>
         )}
         <div className="handle" onClick={() => setShowContent(false)}>

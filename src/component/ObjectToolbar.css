@@ -23,7 +23,13 @@
   box-shadow: 0 0 0 1px rgba(64, 87, 109, 0.07),
     0 2px 12px rgba(53, 71, 90, 0.2);
   z-index: 99999;
+  display: none;
   padding: 16px;
+  top: 30px;
+  left: 30px;
+}
+.toolbar-modal.show {
+  display: block;
 }
 .line-style-container {
   display: flex;
@@ -62,4 +68,29 @@
   height: 24px;
   text-align: center;
   margin: 0;
+}
+button.font-selector {
+  background-color: rgba(57, 76, 96, 0.15);
+  border: 1px solid rgba(43, 59, 74, 0.3);
+  background-clip: padding-box;
+  height: 32px;
+  min-width: unset;
+  padding: 0 2px;
+  justify-content: center;
+  border-radius: 4px;
+  box-sizing: border-box;
+  vertical-align: middle;
+}
+button.font-selector > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+button.font-selector span {
+  padding: 0 4px;
+}
+.toolbar-container {
+  justify-content: center;
+  align-items: center;
+  display: flex;
 }

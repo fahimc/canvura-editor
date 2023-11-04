@@ -34,6 +34,23 @@ function Editor() {
     setCurrentBorderColor(color);
   };
 
+  const setFont = (font: { name: string; path: string }) => {
+    console.log(font);
+    const fontFile = new FontFace(font.name, font.path);
+    document.fonts.add(fontFile);
+
+    fontFile.load().then(
+      () => {
+        apis[currentCanvasIndex].fabricCanvas
+          .getActiveObject()
+          ?.set("fontFamily" as any, font.name);
+      },
+      (err) => {
+        console.error(err);
+      }
+    );
+  };
+
   const setBorder = (strokeWidth: number, dash: number[]) => {
     apis[currentCanvasIndex].fabricCanvas
       .getActiveObject()
@@ -155,7 +172,9 @@ function Editor() {
         section={section}
         updateSection={setSection}
         setBgColor={setBgColor}
+        setBorderColor={setBorderColor}
         layers={layers}
+        setFont={setFont}
       />
       <div className="main-container">
         <div className="editor-toolbar">
