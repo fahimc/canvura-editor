@@ -4,12 +4,15 @@ import DoDisturbIcon from "@mui/icons-material/DoDisturb";
 import "./ObjectToolbar.css";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { NumberInput } from "./number-input/NumberInput";
 
 export const ObjectToolbar = (props: {
   setSection: (section: string) => void;
+  setFontSize: (value: number) => void;
   setBorder: (strokeWidth: number, dash: number[]) => void;
   currentColor: string;
   currentBorderColor: string;
+  fontSize: number;
 }) => {
   const [modelSection, setModalSection] = useState<string>("border");
   const [borderWidth, setBorderWidth] = useState<number>(1);
@@ -54,6 +57,10 @@ export const ObjectToolbar = (props: {
             </span>
           </div>
         </button>
+        <NumberInput
+          fontSize={props.fontSize}
+          setFontSize={props.setFontSize}
+        />
         <div
           className={`toolbar-modal ${showModal ? " show" : ""}`}
           ref={modalRef}

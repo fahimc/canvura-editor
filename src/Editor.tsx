@@ -18,6 +18,7 @@ function Editor() {
   const [pages, setPages] = useState([{}, {}]);
   const [layers, setLayers] = useState<any[]>([]);
   const [currentColor, setCurrentColor] = useState<string>("");
+  const [fontSize, setFontSize] = useState<number>(12);
   const [currentBorderColor, setCurrentBorderColor] = useState<string>("black");
   let currentCanvasIndex = 0;
 
@@ -32,6 +33,14 @@ function Editor() {
       ?.set("stroke", color);
     apis[currentCanvasIndex].fabricCanvas.renderAll();
     setCurrentBorderColor(color);
+  };
+
+  const setCurrentFontSize = (value: number) => {
+    apis[currentCanvasIndex]?.fabricCanvas
+      ?.getActiveObject()
+      ?.set("fontSize" as any, value);
+    setFontSize(value);
+    apis[currentCanvasIndex]?.fabricCanvas?.renderAll();
   };
 
   const setFont = (font: {
@@ -157,6 +166,7 @@ function Editor() {
         case "textbox":
           const text = new fabric.Textbox("Sample Text", {
             width: 100,
+            fontSize: fontSize,
           });
 
           apis[currentCanvasIndex].add(type, text);
@@ -188,6 +198,8 @@ function Editor() {
               setBorder={setBorder}
               currentColor={currentColor}
               currentBorderColor={currentBorderColor}
+              fontSize={fontSize}
+              setFontSize={setCurrentFontSize}
             />
           )}
           <button
