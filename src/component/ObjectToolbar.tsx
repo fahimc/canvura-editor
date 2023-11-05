@@ -5,14 +5,22 @@ import "./ObjectToolbar.css";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { NumberInput } from "./number-input/NumberInput";
+import FormatColorTextOutlinedIcon from "@mui/icons-material/FormatColorTextOutlined";
+import FormatBoldOutlinedIcon from "@mui/icons-material/FormatBoldOutlined";
+import FormatItalicIcon from "@mui/icons-material/FormatItalic";
 
 export const ObjectToolbar = (props: {
   setSection: (section: string) => void;
   setFontSize: (value: number) => void;
+  setFontWeight: (value: number) => void;
+  setItalic: (value: boolean) => void;
   setBorder: (strokeWidth: number, dash: number[]) => void;
   currentColor: string;
   currentBorderColor: string;
+  currentFontColor: string;
   fontSize: number;
+  currentFontWeight: number;
+  currentFontItalic: boolean;
 }) => {
   const [modelSection, setModalSection] = useState<string>("border");
   const [borderWidth, setBorderWidth] = useState<number>(1);
@@ -61,6 +69,36 @@ export const ObjectToolbar = (props: {
           fontSize={props.fontSize}
           setFontSize={props.setFontSize}
         />
+        <button
+          className="font-color"
+          onClick={() => props.setSection("font-color")}
+        >
+          <div>
+            <FormatColorTextOutlinedIcon
+              sx={{ color: props.currentFontColor || "#d9d9d9" }}
+            />
+          </div>
+        </button>
+        <button
+          className={`font-bold ${
+            props.currentFontWeight > 400 ? "selected" : ""
+          }`}
+          onClick={() =>
+            props.setFontWeight(props.currentFontWeight < 800 ? 800 : 400)
+          }
+        >
+          <div>
+            <FormatBoldOutlinedIcon />
+          </div>
+        </button>
+        <button
+          className={`font-style ${props.currentFontItalic ? "selected" : ""}`}
+          onClick={() => props.setItalic(!props.currentFontItalic)}
+        >
+          <div>
+            <FormatItalicIcon />
+          </div>
+        </button>
         <div
           className={`toolbar-modal ${showModal ? " show" : ""}`}
           ref={modalRef}

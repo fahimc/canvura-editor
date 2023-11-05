@@ -3,6 +3,14 @@ import { fabric } from "fabric";
 import "./Page.css";
 import { v4 } from "uuid";
 import { guideLines } from "../util/guide-lines";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
+import LockOpenIcon from "@mui/icons-material/LockOpen";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import NoteAddOutlinedIcon from "@mui/icons-material/NoteAddOutlined";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
 export interface PageApi {
   add(type: string, item: any): void;
@@ -14,7 +22,15 @@ interface PageProps {
   scale: number;
   getApi(canvas: PageApi): void;
   setCurrentPage(): void;
+  createPage(pageNumber: number): void;
+  changePageOrder(pageNumber: number, moveDown: boolean): void;
   setShowObjectToolbar: (show: boolean) => void;
+  pageNumber: number;
+  duplicatePage: (pageNumber: number) => void;
+  deletePage: (pageNumber: number) => void;
+  setFontWeight: (weight: number) => void;
+  setFontItalic: (value: boolean) => void;
+  pageData?: any;
 }
 
 export const Page = (props: PageProps) => {
@@ -24,6 +40,7 @@ export const Page = (props: PageProps) => {
     undefined
   );
   const [layerItems, setLayerItems] = useState<any[]>([]);
+  const [locked, setLocked] = useState<boolean>(false);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { scale, getApi } = props;
@@ -35,36 +52,17 @@ export const Page = (props: PageProps) => {
       fabricCanvas.setWidth(width);
       fabricCanvas.setHeight(height);
 
-      var grid = 25;
+      const handleSelection = (e?: any) => {
+        if (e?.selected[0].fontWeight) {
+          props.setFontWeight(e?.selected[0].fontWeight);
+        }
+        props.setFontItalic(e?.selected[0].fontStyle === "italic");
 
-      // // create grid
-      // for (var i = 0; i < width / grid; i++) {
-      //   fabricCanvas.add(
-      //     new fabric.Line([i * grid, 0, i * grid, height], {
-      //       stroke: "#ccc",
-      //       selectable: false,
-      //     })
-      //   );
-      //   fabricCanvas.add(
-      //     new fabric.Line([0, i * grid, height, i * grid], {
-      //       stroke: "#ccc",
-      //       selectable: false,
-      //     })
-      //   );
-      // }
-
-      // // snap to grid
-      // fabricCanvas.on("object:moving", function (options: any) {
-      //   options.target.set({
-      //     left: Math.round(options.target.left / grid) * grid,
-      //     top: Math.round(options.target.top / grid) * grid,
-      //   });
-      // });
-      const handleSelection = () => {
-        console.log("selected");
         props.setShowObjectToolbar(true);
       };
+
       fabricCanvas.on("selection:updated", handleSelection);
+      fabricCanvas.on("selection:created", handleSelection);
 
       guideLines(fabricCanvas);
 
@@ -96,18 +94,70 @@ export const Page = (props: PageProps) => {
       });
       fabricCanvas.setZoom(scale);
     }
-  }, [scale]);
+    if (fabricCanvas && props.pageData) {
+      fabricCanvas.loadFromJSON(props.pageData, () => {});
+    } else if (fabricCanvas && props.pageData === undefined) {
+      fabricCanvas.clear();
+      fabricCanvas.backgroundColor = "white";
+    }
+  }, [scale, props.pageData]);
+
+  const lockCanvas = (isLocked: boolean) => {
+    if (fabricCanvas) {
+      fabricCanvas.getObjects().forEach((item) => {
+        item.set("selectable", !isLocked);
+        item.set("evented", !isLocked);
+        item.set("lockMovementX", isLocked);
+        item.set("lockMovementY", isLocked);
+      });
+      setLocked(isLocked);
+    }
+  };
+
   return (
     <div
       className="page-container"
-      style={
-        {
-          // width: `${width} * ${scale}px`,
-          // height: `${height} * ${scale}px`,
-        }
-      }
+      style={{
+        width: `${width * scale}px`,
+        height: `${height * scale}px`,
+      }}
       onClick={() => props.setCurrentPage()}
     >
+      <div className="page-toolbar">
+        <div className="title">Page {props.pageNumber}</div>
+        <div className="actions">
+          <button
+            disabled={props.pageNumber <= 1}
+            onClick={() => props.changePageOrder(props.pageNumber - 1, false)}
+          >
+            <ExpandLessIcon sx={{ color: "rgb(153, 146, 150)" }} />
+          </button>
+          <button
+            onClick={() => props.changePageOrder(props.pageNumber - 1, true)}
+          >
+            <ExpandMoreIcon sx={{ color: "rgb(153, 146, 150)" }} />
+          </button>
+          {/* <button>
+            <VisibilityOffOutlinedIcon sx={{ color: "rgb(153, 146, 150)" }} />
+          </button> */}
+          <button onClick={() => lockCanvas(!locked)}>
+            {locked ? (
+              <LockOutlinedIcon sx={{ color: "rgb(153, 146, 150)" }} />
+            ) : (
+              <LockOpenIcon sx={{ color: "rgb(153, 146, 150)" }} />
+            )}
+          </button>
+          <button onClick={() => props.duplicatePage(props.pageNumber - 1)}>
+            <ContentCopyIcon sx={{ color: "rgb(153, 146, 150)" }} />
+          </button>
+          <button onClick={() => props.deletePage(props.pageNumber - 1)}>
+            <DeleteOutlineIcon sx={{ color: "rgb(153, 146, 150)" }} />
+          </button>
+          <button onClick={() => props.createPage(props.pageNumber - 1)}>
+            <NoteAddOutlinedIcon sx={{ color: "rgb(153, 146, 150)" }} />
+          </button>
+        </div>
+      </div>
       <canvas ref={canvasRef}></canvas>
     </div>
   );

@@ -15,11 +15,14 @@ function Editor() {
   const [showObjectToolbar, setShowObjectToolbar] = useState(false);
   const [section, setSection] = useState("");
   const [isColorPalette, setIsColorPalette] = useState(false);
-  const [pages, setPages] = useState([{}, {}]);
+  const [pages, setPages] = useState<any[]>([undefined]);
   const [layers, setLayers] = useState<any[]>([]);
   const [currentColor, setCurrentColor] = useState<string>("");
-  const [fontSize, setFontSize] = useState<number>(12);
+  const [fontSize, setFontSize] = useState<number>(16);
   const [currentBorderColor, setCurrentBorderColor] = useState<string>("black");
+  const [currentFontColor, setCurrentFontColor] = useState<string>("black");
+  const [currentFontWeight, setCurrentFontWeight] = useState<number>(400);
+  const [currentFontItalic, setCurrentFontItalic] = useState<boolean>(false);
   let currentCanvasIndex = 0;
 
   const setBgColor = (color: string) => {
@@ -33,6 +36,27 @@ function Editor() {
       ?.set("stroke", color);
     apis[currentCanvasIndex].fabricCanvas.renderAll();
     setCurrentBorderColor(color);
+  };
+  const setFontColor = (color: string) => {
+    apis[currentCanvasIndex].fabricCanvas.getActiveObject()?.set("fill", color);
+    apis[currentCanvasIndex].fabricCanvas.renderAll();
+    setCurrentFontColor(color);
+  };
+
+  const setFontWeight = (weight: number) => {
+    apis[currentCanvasIndex].fabricCanvas
+      .getActiveObject()
+      ?.set("fontWeight" as any, weight);
+    setCurrentFontWeight(weight);
+    apis[currentCanvasIndex].fabricCanvas.renderAll();
+  };
+
+  const setItalic = (value: boolean) => {
+    apis[currentCanvasIndex].fabricCanvas
+      .getActiveObject()
+      ?.set("fontStyle" as any, value ? "italic" : "");
+    setCurrentFontItalic(value);
+    apis[currentCanvasIndex].fabricCanvas.renderAll();
   };
 
   const setCurrentFontSize = (value: number) => {
@@ -83,6 +107,53 @@ function Editor() {
 
   const setCurrentPage = (index: number) => {
     currentCanvasIndex = index;
+  };
+
+  const changePageOrder = (pageNumber: number, moveDown: boolean) => {
+    const pageList = [...pages];
+    if (moveDown && pageList[pageNumber] && pageList[pageNumber + 1]) {
+      const pageData = apis[pageNumber].fabricCanvas.toJSON();
+      const pageData2 = apis[pageNumber + 1].fabricCanvas.toJSON();
+      pageList[pageNumber] = pageData2;
+      pageList[pageNumber + 1] = pageData;
+      setPages(pageList);
+      apis[pageNumber].fabricCanvas.loadFromJSON(pageData2, () => {});
+      apis[pageNumber + 1].fabricCanvas.loadFromJSON(pageData, () => {});
+    } else {
+      const pageData = apis[pageNumber].fabricCanvas.toJSON();
+      const pageData2 = apis[pageNumber - 1].fabricCanvas.toJSON();
+      pageList[pageNumber] = pageData2;
+      pageList[pageNumber - 1] = pageData;
+      setPages(pageList);
+      apis[pageNumber].fabricCanvas.loadFromJSON(pageData2, () => {});
+      apis[pageNumber - 1].fabricCanvas.loadFromJSON(pageData, () => {});
+    }
+  };
+
+  const duplicatePage = (pageNumber: number) => {
+    const pageList = [...pages];
+    console.log(pageNumber);
+    const pageData = apis[pageNumber].fabricCanvas.toJSON();
+    console.log(pageData);
+    pageList.splice(pageNumber + 1, 0, { ...pageData });
+    setPages(pageList);
+  };
+
+  const deletePage = (pageNumber: number) => {
+    const pageList = [...pages];
+    pageList.splice(pageNumber, 1);
+    setPages(pageList);
+  };
+
+  const createPage = (pageNumber?: number) => {
+    if (pageNumber === undefined) {
+      setPages([...pages, undefined]);
+    } else {
+      console.log(pageNumber);
+      const pageList: any[] = apis.map((item) => item.fabricCanvas.toJSON());
+      pageList.splice(pageNumber + 1, 0, undefined);
+      setPages(pageList);
+    }
   };
 
   function handleImage(e: any) {
@@ -187,6 +258,7 @@ function Editor() {
         updateSection={setSection}
         setBgColor={setBgColor}
         setBorderColor={setBorderColor}
+        setFontColor={setFontColor}
         layers={layers}
         setFont={setFont}
       />
@@ -198,8 +270,13 @@ function Editor() {
               setBorder={setBorder}
               currentColor={currentColor}
               currentBorderColor={currentBorderColor}
+              currentFontColor={currentFontColor}
               fontSize={fontSize}
               setFontSize={setCurrentFontSize}
+              setFontWeight={setFontWeight}
+              setItalic={setItalic}
+              currentFontWeight={currentFontWeight}
+              currentFontItalic={currentFontItalic}
             />
           )}
           <button
@@ -218,13 +295,24 @@ function Editor() {
             return (
               <Page
                 key={index}
+                pageNumber={index + 1}
                 scale={scale}
                 getApi={(canvas) => getApi(index, canvas)}
                 setCurrentPage={() => setCurrentPage(index)}
                 setShowObjectToolbar={setShowObjectToolbar}
+                changePageOrder={changePageOrder}
+                duplicatePage={duplicatePage}
+                pageData={item}
+                deletePage={deletePage}
+                createPage={createPage}
+                setFontWeight={setFontWeight}
+                setFontItalic={setItalic}
               ></Page>
             );
           })}
+          <button className="add-page-button" onClick={() => createPage()}>
+            + Add Page
+          </button>
         </div>
         <div className="editor-footer">
           <span>{pages.length} Pages</span>

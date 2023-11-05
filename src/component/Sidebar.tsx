@@ -17,6 +17,7 @@ export type SectionType =
   | "position"
   | "color"
   | "border-color"
+  | "font-color"
   | "font-family"
   | "text"
   | "";
@@ -28,6 +29,7 @@ export const Sidebar = (props: {
   updateSection: (section: string) => void;
   setBgColor: (color: string) => void;
   setBorderColor: (color: string) => void;
+  setFontColor: (color: string) => void;
   setFont: (font: { name: string; path: string }) => void;
   layers?: any[];
   showSection?: string;
@@ -196,6 +198,9 @@ export const Sidebar = (props: {
         )}
         {sectionType === "border-color" && (
           <ColorPanel setBgColor={props.setBorderColor} />
+        )}
+        {sectionType === "font-color" && (
+          <ColorPanel setBgColor={props.setFontColor} />
         )}
         {sectionType === "font-family" && (
           <div className="font-family">

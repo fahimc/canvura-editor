@@ -70,7 +70,7 @@
   margin: 0;
 }
 button.font-selector {
-  background-color: rgba(57, 76, 96, 0.15);
+  background-color: white;
   border: 1px solid rgba(43, 59, 74, 0.3);
   background-clip: padding-box;
   height: 32px;
@@ -93,4 +93,10 @@ button.font-selector span {
   justify-content: center;
   align-items: center;
   display: flex;
+}
+.font-bold.selected {
+  background-color: #f1f3f5;
+}
+.font-style.selected {
+  background-color: #f1f3f5;
 }
