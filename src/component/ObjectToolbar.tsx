@@ -8,18 +8,24 @@ import { NumberInput } from "./number-input/NumberInput";
 import FormatColorTextOutlinedIcon from "@mui/icons-material/FormatColorTextOutlined";
 import FormatBoldOutlinedIcon from "@mui/icons-material/FormatBoldOutlined";
 import FormatItalicIcon from "@mui/icons-material/FormatItalic";
+import FormatUnderlinedIcon from "@mui/icons-material/FormatUnderlined";
+import StrikethroughSOutlinedIcon from "@mui/icons-material/StrikethroughSOutlined";
 
 export const ObjectToolbar = (props: {
   setSection: (section: string) => void;
   setFontSize: (value: number) => void;
   setFontWeight: (value: number) => void;
   setItalic: (value: boolean) => void;
+  setUnderline: (value: boolean) => void;
+  setStrikethrough: (value: boolean) => void;
   setBorder: (strokeWidth: number, dash: number[]) => void;
   currentColor: string;
   currentBorderColor: string;
   currentFontColor: string;
   fontSize: number;
   currentFontWeight: number;
+  currentFontUnderline: boolean;
+  currentFontStrikeThrough: boolean;
   currentFontItalic: boolean;
 }) => {
   const [modelSection, setModalSection] = useState<string>("border");
@@ -97,6 +103,28 @@ export const ObjectToolbar = (props: {
         >
           <div>
             <FormatItalicIcon />
+          </div>
+        </button>
+        <button
+          className={`font-underline ${
+            props.currentFontUnderline ? "selected" : ""
+          }`}
+          onClick={() => props.setUnderline(!props.currentFontUnderline)}
+        >
+          <div>
+            <FormatUnderlinedIcon />
+          </div>
+        </button>
+        <button
+          className={`font-strikethrough ${
+            props.currentFontStrikeThrough ? "selected" : ""
+          }`}
+          onClick={() =>
+            props.setStrikethrough(!props.currentFontStrikeThrough)
+          }
+        >
+          <div>
+            <StrikethroughSOutlinedIcon />
           </div>
         </button>
         <div

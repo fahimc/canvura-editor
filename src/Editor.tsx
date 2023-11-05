@@ -23,6 +23,10 @@ function Editor() {
   const [currentFontColor, setCurrentFontColor] = useState<string>("black");
   const [currentFontWeight, setCurrentFontWeight] = useState<number>(400);
   const [currentFontItalic, setCurrentFontItalic] = useState<boolean>(false);
+  const [currentFontStrikeThrough, setCurrentFontStrikeThrough] =
+    useState<boolean>(false);
+  const [currentFontUnderline, setCurrentFontUnderline] =
+    useState<boolean>(false);
   let currentCanvasIndex = 0;
 
   const setBgColor = (color: string) => {
@@ -65,6 +69,22 @@ function Editor() {
       ?.set("fontSize" as any, value);
     setFontSize(value);
     apis[currentCanvasIndex]?.fabricCanvas?.renderAll();
+  };
+
+  const setUnderline = (value: boolean) => {
+    apis[currentCanvasIndex].fabricCanvas
+      .getActiveObject()
+      ?.set("underline" as any, value);
+    setCurrentFontUnderline(value);
+    apis[currentCanvasIndex].fabricCanvas.renderAll();
+  };
+
+  const setStrikethrough = (value: boolean) => {
+    apis[currentCanvasIndex].fabricCanvas
+      .getActiveObject()
+      ?.set("linethrough" as any, value);
+    setCurrentFontStrikeThrough(value);
+    apis[currentCanvasIndex].fabricCanvas.renderAll();
   };
 
   const setFont = (font: {
@@ -275,8 +295,12 @@ function Editor() {
               setFontSize={setCurrentFontSize}
               setFontWeight={setFontWeight}
               setItalic={setItalic}
+              setUnderline={setUnderline}
+              setStrikethrough={setStrikethrough}
               currentFontWeight={currentFontWeight}
               currentFontItalic={currentFontItalic}
+              currentFontUnderline={currentFontUnderline}
+              currentFontStrikeThrough={currentFontStrikeThrough}
             />
           )}
           <button
